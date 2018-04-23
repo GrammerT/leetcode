@@ -3,6 +3,7 @@
 #include <vector>
 using namespace std;
 
+//! will limit time. don't AC
 class Solution {
 public:
     string longestPalindrome(string s) {
@@ -69,15 +70,44 @@ public:
 
 
 //! optimazation 1
-class Solution {
+//! use dp method
+class Solution1 {
 public:
     string longestPalindrome(string s) {
+        int strSize = s.size();
+        bool dp[1000][1000] ;
+        for(int i=0;i<strSize;++i)
+            for(int j=0;j<strSize;++j)
+                dp[i][j]=false;
+        int max_length=-1; //! record sub string's length
+        int start;          //! record sub string's point
+        for(int i=0;i<strSize;++i)
+        {
+            for(int j=0;j<=i;++j)
+            {
+                if(i-j<2)
+                {
+                    dp[j][i]=(s[i]==s[j]);
+                }
+                else
+                {
+                    dp[j][i]=(s[i]==s[j]&&dp[j+1][i-1]);
+                }
+                if((i-j+1)>max_length&&dp[j][i])
+                {
+                    max_length=i-j+1;
+                    start = j;
+                }
+            }
+        }
+        string sub = s.substr(start,max_length);
+        return sub;
     }
 };
 
 int main(int argc, char *argv[])
 {
-    Solution s;
+    Solution1 s;
     s.longestPalindrome("a");
     s.longestPalindrome("bb");
     s.longestPalindrome("bbb");
