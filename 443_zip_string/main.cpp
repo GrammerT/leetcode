@@ -1,5 +1,6 @@
 #include <iostream>
 #include <vector>
+#include <string>
 
 using namespace std;
 
@@ -29,29 +30,26 @@ public:
                 }
                 else
                 {
-                    vector<char> nums;
-                    while(tmp_size)
-                    {
-                        char value = tmp_size%10+'0';
-                        nums.insert(nums.begin(),value);
-                        tmp_size/=10;
-                    }
+                    string nums = to_string(tmp_size);
                     tmp_chars.push_back(chars[i-1]);
-                    tmp_chars.insert(tmp_chars.end(),nums.begin(),nums.end());
+                    for(auto c:nums)
+                    {
+                        tmp_chars.push_back(c);
+                    }
                     tmp=chars[i];
                     tmp_size = 1;
                 }
             }
         }
-        vector<char> nums;
-        while(tmp_size)
-        {
-            char value = tmp_size%10+'0';
-            nums.insert(nums.begin(),value);
-            tmp_size/=10;
-        }
         tmp_chars.push_back(tmp);
-        tmp_chars.insert(tmp_chars.end(),nums.begin(),nums.end());
+        if(tmp_size!=1)
+        {
+            string nums = to_string(tmp_size);
+            for(auto c:nums)
+            {
+                tmp_chars.push_back(c);
+            }
+        }
         chars.insert(chars.begin(),tmp_chars.begin(),tmp_chars.end());
         return tmp_chars.size();
     }
