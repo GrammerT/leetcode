@@ -1,51 +1,51 @@
 #include <iostream>
-
+#include <vector>
+#include <algorithm>
 using namespace std;
 
 class Solution {
 public:
-    int countSubstrings(string s) {
+    int countSubstrings(string s)
+    {
         if(s.size()==0)
             return 0;
-        if(s.size()==1)
-            return 1;
-        bool isP[1000][1000];
-        for(int i=0;i<1000;++i)
+        vector<vector<bool>> array(s.size(),vector<bool>(s.size(),false));
+        for(int i=0;i<array.size();++i)
         {
-            for(int j=0;j<1000;++j)
-                isP[i][j]=false;
-        }
-        for(int i=0;i<s.size()-1;++i)
-        {
-            isP[i][i]=true;
+            array[i][i]=true;
+            if((i+1)==array.size())
+                break;
             if(s[i]==s[i+1])
             {
-                isP[i+1][i]=true;
-//                isP[i][i+1]=true;
+                array[i][i+1]=true;
             }
         }
-        isP[s.size()-1][s.size()-1]=true;
-        for(int i=0;i<s.size();++i)
+        for(int len=3;len<=s.size();++len)
         {
-            for(int j=i+2;j<s.size();++j)
+            for(int i=0;i<s.size();++i)
             {
+                int j=i+len-1;
+                if(j>s.size()-1)
+                    continue;
                 if(s[i]==s[j])
                 {
-                    isP[i][j]=isP[i+1][j-1];
+                    array[i][j]=array[i+1][j-1];
                 }
                 else
                 {
-                    isP[i][j]=false;
+                    array[i][j]=false;
                 }
             }
         }
         int count=0;
-        for(int i=0;i<1000;++i)
-            for(int j=0;j<1000;++j)
+        for(int i=0;i<array.size();++i)
+        {
+            for(int j=0;j<array[i].size();++j)
             {
-                if(isP[i][j]==true)
+                if(array[i][j])
                     count++;
             }
+        }
         return count;
     }
 };
@@ -53,7 +53,7 @@ public:
 int main(int argc, char *argv[])
 {
     Solution s;
-    s.countSubstrings("aaa");
+    s.countSubstrings("aaaaa");
     s.countSubstrings("aba");
     return 0;
 }
