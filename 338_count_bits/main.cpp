@@ -5,24 +5,18 @@ using namespace std;
 class Solution {
 public:
     vector<int> countBits(int num) {
-        char p[2]={'0','1'};
+        int p[2]={0,1};
         vector<int> charNum;
         for(int i=0;i<=num;++i)
         {
-            vector<char> chars;
+            int chars=0;
             int tmp = i;
             while(tmp>0)
             {
-                chars.push_back(p[tmp%2]);
-                tmp=tmp/2;
+                chars+=p[tmp%2];
+                tmp>>=1;
             }
-            int count =0;
-            for(int j=0;j<chars.size();++j)
-            {
-                if('1'==chars[j])
-                    count++;
-            }
-            charNum.push_back(count);
+            charNum.push_back(chars);
         }
         return charNum;
     }
