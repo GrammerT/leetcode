@@ -6,32 +6,34 @@ class Solution {
 public:
     bool wordBreak(string s,
                    vector<string>& wordDict) {
-        int startIndex = 0;
-        int s_size = 0;
-        int size = s.size();
-        while(s_size<s.size()&&startIndex<s.size())
+        vector<int> vb(s.size(),-1);
+        return isMatch(s,wordDict,vb);
+    }
+    bool isMatch(string s,vector<string>& wordDict,vector<int>&vb)
+    {
+        vector<string>::iterator iter = find(wordDict.begin(),wordDict.end(),s);
+        if(iter!=wordDict.end())
+            return true;
+        for(int i=1;i<s.size();++i)
         {
-            bool isSub = false;
-            for(int i=startIndex+1;i<=s.size();++i)
+            string substr = s.substr(0,i);
+            vector<string>::iterator iter = find(wordDict.begin(),wordDict.end(),substr);
+            if(iter!=wordDict.end())
             {
-                string sbuStr = s.substr(startIndex,i-startIndex);
-                vector<string>::iterator iter =
-                        find(wordDict.begin(),wordDict.end(),sbuStr);
-                if(iter!=wordDict.end())
+                bool isWord;
+                if(vb[i]!=-1)
                 {
-                    s_size+=(i-startIndex);
-                    startIndex=i;
-                    isSub = true;
-                    break;
+                    isWord=vb[i];
                 }
-            }
-            if(!isSub)
-            {
-                startIndex++;
+                else
+                {
+                    isWord = isMatch(s.substr(i,s.size()-1),wordDict,vb);
+                    vb[i]=isWord;
+                }
+                if(isWord)
+                    return true;
             }
         }
-        if(s_size==s.size())
-            return true;
         return false;
     }
 };
@@ -40,6 +42,8 @@ int main(int argc, char *argv[])
 {
     Solution s;
     string str= "aaaaaaa";
+    string str1= "abcdefghi";
+    string sss=str1.substr(0,0);
     vector<string> wordDict;
     wordDict.push_back("aaaa");
     wordDict.push_back("aaa");
